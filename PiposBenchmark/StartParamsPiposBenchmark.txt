@@ -1,0 +1,13 @@
+// START PARAMETERS PIPOS_BENCHMARK
+// Ange sökvägar till en mapp på en Fileserver 
+.. Target Folders
+localdisk D: on computer ..D:\temp\testfile.txt
+localdisk C: on computer ..D:\temp\testfile.txt
+Serverfolder in Ostersund ..Z:\Projekt 2020\benchmarkTest\testfile.txt
+..End of input(Line must stay as is)
+
+// Ange en connectionstring till en Postgresdatabas (Observera att POSTGIS skall vara installerat)
+.. Connections string
+DS51 (lager3) .. Host=192.168.80.214;Username=www-data;Password=www-data;Database=pipos_master;port=5433
+MasterDB (lager2) .. Host=masterdb;Username=rt_admin;Password=XM!Jsa0-5Nd!Zds;Database=pipos_master;port=5432
+..End of input(Line must stay as is)
