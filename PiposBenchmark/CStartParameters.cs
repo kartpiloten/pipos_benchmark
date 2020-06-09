@@ -8,6 +8,13 @@ namespace PiposBenchmark
 {
     public class CStartParameters
     {
+        public Int64 x_min;
+        public Int64 x_max;
+        public Int64 y_min;
+        public Int64 y_max;
+
+        public bool removeTestFile_DatabaseAfterTest;
+
         public string[] targetFoldersName = new string[10];
         public string[] targetFolders = new string[10];
         public string[] connectStringsName = new string[10];
@@ -20,7 +27,24 @@ namespace PiposBenchmark
             string line;
             while ((line = streamReader.ReadLine()) != null)
             {
-                if (line == ".. Target Folders")
+                if (line == "..removeTestFile_DatabaseAfterTest")
+                {
+                   line = streamReader.ReadLine();
+                   if (line == "yes")
+                    {
+                        this.removeTestFile_DatabaseAfterTest = true;
+                    }
+                }
+                else if (line == "..areaOfTiles")
+                {
+                    line = streamReader.ReadLine();
+                    string[] lineArray = line.Split("..");
+                    x_min = Convert.ToInt64(lineArray[0]);
+                    x_max = Convert.ToInt64(lineArray[1]);
+                    y_min = Convert.ToInt64(lineArray[2]);
+                    y_max = Convert.ToInt64(lineArray[3]);
+                }
+                else if (line == ".. Target Folders")
                 {
                     int i = 0;
                     while ((line = streamReader.ReadLine()) != "..End of input(Line must stay as is)")
@@ -31,7 +55,7 @@ namespace PiposBenchmark
                         i++;
                     }
                 }
-                if (line == ".. Connections string")
+                else if (line == ".. Connections string")
                 {
                     int i = 0;
                     while ((line = streamReader.ReadLine()) != "..End of input(Line must stay as is)")

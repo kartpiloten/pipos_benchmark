@@ -1,13 +1,20 @@
 // START PARAMETERS PIPOS_BENCHMARK
-// Ange sökvägar till en mapp på en Fileserver 
+// Ange sökvägar till en mapp på en Fileserver
+
+// areaOfTiles x-min..x-max..y-min..y-max
+..areaOfTiles
+236000..270000..991000..2697000
+// 236000..270000..991000..7697000
+..removeTestFile_DatabaseAfterTest
+yes
 .. Target Folders
-localdisk D: on computer ..D:\temp\testfile.txt
-localdisk C: on computer ..D:\temp\testfile.txt
-Serverfolder in Ostersund ..Z:\Projekt 2020\benchmarkTest\testfile.txt
+localdisk D: on workstation ..D:\temp\testfile.bin
+localdisk C: on workstation ..D:\temp\testfile.bin
+Serverfolder in Ostersund ..Z:\Projekt 2020\benchmarkTest\testfile.bin
 ..End of input(Line must stay as is)
 
 // Ange en connectionstring till en Postgresdatabas (Observera att POSTGIS skall vara installerat)
 .. Connections string
 DS51 (lager3) .. Host=192.168.80.214;Username=www-data;Password=www-data;Database=pipos_master;port=5433
-MasterDB (lager2) .. Host=masterdb;Username=rt_admin;Password=XM!Jsa0-5Nd!Zds;Database=pipos_master;port=5432
+MasterDB (lager2) .. Host=masterdb;Username=rt_admin;Password=XM!Jsa0-5Nd!Zds;Database=masterdb;port=5432
 ..End of input(Line must stay as is)
