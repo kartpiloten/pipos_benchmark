@@ -3,13 +3,13 @@
 
 // areaOfTiles x-min..x-max..y-min..y-max
 ..areaOfTiles
-236000..270000..991000..2697000
+230000..300000..900000..2000000
 // 236000..270000..991000..7697000
 ..removeTestFile_DatabaseAfterTest
 yes
 .. Target Folders
 localdisk D: on workstation ..D:\temp\testfile.bin
-localdisk C: on workstation ..D:\temp\testfile.bin
+localdisk C: on workstation ..C:\temp\testfile.bin
 Serverfolder in Ostersund ..Z:\Projekt 2020\benchmarkTest\testfile.bin
 ..End of input(Line must stay as is)
 
