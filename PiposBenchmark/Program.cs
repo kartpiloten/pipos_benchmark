@@ -36,16 +36,12 @@ namespace PiposBenchmark
             {
                 if (aStartParColl.targetFolders[i] != null)
                 {
-                    sw.Start();
-                    CMapTileList.writeListToFileToDiskBinary(aStartParColl.targetFolders[i], aMaptileList);
-                    sw.Stop();
+                    CMapTileList.writeListToFileToDiskBinary(sw, aStartParColl.targetFolders[i], aMaptileList);
                     Console.WriteLine("{0}   Write Timemeasure={1}", aStartParColl.targetFoldersName[i], sw.Elapsed);
                     sw.Reset();
                     FileInfo fi = new FileInfo(aStartParColl.targetFolders[i]);
-                    Console.WriteLine("File Size in Megabytes: {0}", ((Int64)(fi.Length/1024f)/1024f));
-                    sw.Start();
-                    CMapTileList.readListToFileToDiskBinary(aStartParColl.targetFolders[i], aStartParColl);
-                    sw.Stop();
+                    Console.WriteLine("File Size in Megabytes: {0}", ((Int64)(fi.Length / 1024f) / 1024f));
+                    CMapTileList.readListToFileToDiskBinary(sw, aStartParColl.targetFolders[i], aStartParColl);
                     Console.WriteLine("{0}   Read Timemeasure={1}", aStartParColl.targetFoldersName[i], sw.Elapsed);
                     Console.WriteLine();
                     sw.Reset();

@@ -3,7 +3,7 @@
 
 // areaOfTiles x-min..x-max..y-min..y-max
 ..areaOfTiles
-230000..300000..900000..2000000
+230000..300000..900000..4000000
 // 236000..270000..991000..7697000
 ..removeTestFile_DatabaseAfterTest
 yes

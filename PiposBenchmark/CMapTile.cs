@@ -9,6 +9,7 @@ using Npgsql.NetTopologySuite;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics;
 
 namespace PiposBenchmark
 {
@@ -31,40 +32,56 @@ namespace PiposBenchmark
             {
                 for (Int64 y = aStartParameters.y_min; y < aStartParameters.y_max; y = y + 250)
                 {
-                    CMapTile aChapTile = new CMapTile(x,y);
+                    CMapTile aChapTile = new CMapTile(x, y);
                     theMapList.Add(aChapTile);
-                    
+
                     number_of_tiles_created++;
                     if (number_of_tiles_created % 100 == 0 && number_of_tiles_created != 0)
                     {
                         Console.Write("\r{0}   {1}", number_of_tiles_created, " The target number is " + total_number_tiles);
                     }
-                    
+
                 }
             }
-            Console.WriteLine("\r "+ total_number_tiles  + " tiles were created                                     ");
+            Console.WriteLine("\r " + total_number_tiles + " tiles were created                                     ");
         }
 
-        public static void writeListToFileToDiskBinary(string pathToFile, CMapTileList aMapTileList) 
+        public static void writeListToFileToDiskBinary(Stopwatch sw, string pathToFile, CMapTileList aMapTileList)
         {
+
             IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(pathToFile, FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, aMapTileList);
-            stream.Close();
+            using (var memoryStream = new MemoryStream())
+            using (var stream = new FileStream(pathToFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                formatter.Serialize(memoryStream, aMapTileList);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                sw.Start();
+                memoryStream.CopyTo(stream);
+                stream.Flush();
+                sw.Stop();
+            }
         }
 
-        public static void readListToFileToDiskBinary(string pathToFile, CStartParameters aStartParameters)
+        public static void readListToFileToDiskBinary(Stopwatch sw, string pathToFile, CStartParameters aStartParameters)
         {
             CMapTileList aMapaMapTileList = null;
-            FileStream fs = new FileStream(pathToFile, FileMode.Open);
-            IFormatter formatter = new BinaryFormatter();
-            aMapaMapTileList = (CMapTileList)formatter.Deserialize(fs);
-            fs.Close();
+
+            using (FileStream fs = new FileStream(pathToFile, FileMode.Open))
+            using (var memoryStream = new MemoryStream())
+            {
+                sw.Start();
+                fs.CopyTo(memoryStream);
+                sw.Stop();
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                IFormatter formatter = new BinaryFormatter();
+                aMapaMapTileList = (CMapTileList)formatter.Deserialize(memoryStream);
+            }
+
             if (aStartParameters.removeTestFile_DatabaseAfterTest)
             {
                 File.Delete(pathToFile);
             }
-
         }
 
         public void writeListToDatabase(string connectionstring)
@@ -103,14 +120,14 @@ namespace PiposBenchmark
                     writer.Complete();
                 }
                 conn.Close();
-                
+
             }
         }
         public void readListFromDatabase(string connectionstring)
         {
             using (var conn = new NpgsqlConnection(connectionstring))
             {
-                conn.Open(); 
+                conn.Open();
                 conn.TypeMapper.UseNetTopologySuite();
                 CMapTileList aMapTileList = new CMapTileList();
 
@@ -133,7 +150,7 @@ namespace PiposBenchmark
 
         }
 
-        public static void  GetSizeOfTable(string ConnString)
+        public static void GetSizeOfTable(string ConnString)
         {
             string result = "";
             NpgsqlConnection conn = new NpgsqlConnection(ConnString);
@@ -146,7 +163,7 @@ namespace PiposBenchmark
             while (dr.Read())
             {
                 result = Convert.ToString(dr[0]);
-                Console.WriteLine("The size of the databasetable is: " + result);              
+                Console.WriteLine("The size of the databasetable is: " + result);
             }
             conn.Close();
 
@@ -164,11 +181,10 @@ namespace PiposBenchmark
         public CMapTile(Int64 x, Int64 y)
         {
             TileID = Convert.ToInt64(x.ToString() + y.ToString());
-            lowerWestCorner = new Coordinate(x,y);
-            lowerEastCorner = new Coordinate(x, y+250);
+            lowerWestCorner = new Coordinate(x, y);
+            lowerEastCorner = new Coordinate(x, y + 250);
             upperEastCorner = new Coordinate(x + 250, y);
             upperWestCorner = new Coordinate(x + 250, y + 250);
         }
     }
 }
-   

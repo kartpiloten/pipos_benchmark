@@ -27,15 +27,7 @@ namespace PiposBenchmark
             string line;
             while ((line = streamReader.ReadLine()) != null)
             {
-                if (line == "..removeTestFile_DatabaseAfterTest")
-                {
-                   line = streamReader.ReadLine();
-                   if (line == "yes")
-                    {
-                        this.removeTestFile_DatabaseAfterTest = true;
-                    }
-                }
-                else if (line == "..areaOfTiles")
+                if (line == "..areaOfTiles")
                 {
                     line = streamReader.ReadLine();
                     string[] lineArray = line.Split("..");
@@ -43,6 +35,14 @@ namespace PiposBenchmark
                     x_max = Convert.ToInt64(lineArray[1]);
                     y_min = Convert.ToInt64(lineArray[2]);
                     y_max = Convert.ToInt64(lineArray[3]);
+                }
+                else if (line == "..removeTestFile_DatabaseAfterTest")
+                {
+                    line = streamReader.ReadLine();
+                    if (line == "yes")
+                    {
+                        this.removeTestFile_DatabaseAfterTest = true;
+                    }
                 }
                 else if (line == ".. Target Folders")
                 {
